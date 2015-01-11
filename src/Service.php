@@ -10,6 +10,7 @@ use Nickpeirson\Evohome\Request\LocationStatus;
 use Nickpeirson\Evohome\Request\Gateway;
 use Nickpeirson\Evohome\Request\LocationInstallationInfo;
 use Nickpeirson\Evohome\Request\ZoneSchedule;
+use Nickpeirson\Evohome\Request\RefreshToken;
 
 class Service
 {
@@ -103,10 +104,21 @@ class Service
             throw new \Exception('Please log in before making requests');
         }
         if ($this->token->isExpired()) {
-            throw new \Exception('Token has expired. Please log in again.');
+            $this->refreshToken();
         }
         $request->setToken($this->token);
         return $this->client->sendRequest($request);
+    }
+
+    public function refreshToken()
+    {
+        $request = (new RefreshToken())
+            ->setToken($this->token);
+        $response = $this->client->sendRequest($request);
+        if (isset($response->error)) {
+            throw new \Exception('Unable to refresh token');
+        }
+        $this->token = $this->mapResponseToToken($response);
     }
 
     protected function mapResponseToToken($response)

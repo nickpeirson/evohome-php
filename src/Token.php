@@ -48,5 +48,9 @@ class Token
     {
         return $this->type;
     }
+	public function getRefreshToken() {
+		return $this->refreshToken;
+	}
+
 
 }

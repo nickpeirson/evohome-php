@@ -4,12 +4,9 @@ namespace Nickpeirson\Evohome\Request;
 use Nickpeirson\Evohome\RequestInterface;
 use Nickpeirson\Evohome\Service;
 
-abstract class BasicAuthAbstract implements RequestInterface
+abstract class AuthAbstract implements RequestInterface
 {
     const APP_PASS = 'test';
-
-    protected $username;
-    protected $password;
 
     public function getOptions()
     {
@@ -30,10 +27,7 @@ abstract class BasicAuthAbstract implements RequestInterface
     protected function getBody()
     {
         return [
-            'grant_type' => 'password',
-            'scope' => 'EMEA-V1-Basic EMEA-V1-Anonymous EMEA-V1-Get-Current-User-Account',
-            'Username' => $this->username,
-            'Password' => $this->password
+            'scope' => 'EMEA-V1-Basic EMEA-V1-Anonymous EMEA-V1-Get-Current-User-Account'
         ];
     }
 
@@ -42,17 +36,8 @@ abstract class BasicAuthAbstract implements RequestInterface
         return 'post';
     }
 
-    abstract public function getPath();
-
-    public function setUsername($username)
+    public function getPath()
     {
-        $this->username = $username;
-        return $this;
-    }
-
-    public function setPassword($password)
-    {
-        $this->password = $password;
-        return $this;
+        return 'Auth/OAuth/Token';
     }
 }
