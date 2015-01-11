@@ -1,0 +1,16 @@
+{
+	"name" : "nickpeirson/evohome",
+	"authors" : [{
+			"name" : "Nick Peirson",
+			"email" : "nickpeirson@gmail.com"
+		}
+	],
+	"autoload" : {
+		"psr-4" : {
+			"Nickpeirson\\Evohome\\" : "src/"
+		}
+	},
+	"require" : {
+		"guzzlehttp/guzzle" : ">=5.0.3"
+	}
+}
