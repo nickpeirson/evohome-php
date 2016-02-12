@@ -3,13 +3,13 @@ namespace Nickpeirson\Evohome;
 
 use GuzzleHttp\ClientInterface as HttpClientInterface;
 use GuzzleHttp\Client as HttpClient;
-use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Message\RequestInterface as HttpRequestInterface;
+use GuzzleHttp\Exception\ConnectException;
+use Psr\Http\Message\StreamInterface;
 
 class Client
 {
-    const URL = 'https://rs.alarmnet.com:443/TotalConnectComfort/';
+    const URL = 'https://tccna.honeywell.com/';
 
     protected $debug = true;
     protected $httpClient;
@@ -23,7 +23,7 @@ class Client
     {
         return new static(
             new HttpClient([
-                    'base_url' => static::URL,
+                    'base_uri' => static::URL,
                     'headers' => [
                         'Accept' => 'application/json, application/xml, text/json, text/x-json, text/javascript, text/xml'
                     ]
@@ -35,47 +35,27 @@ class Client
     public function sendRequest(RequestInterface $request)
     {
         $client = $this->httpClient;
-        $request = $client->createRequest(
-            $request->getMethod(),
-            $request->getPath(),
-            $request->getOptions()
-        );
-        $this->outputRequest($request);
+
         try {
-            $response = $client->send($request);
+            $request = $client->request(
+                $request->getMethod(),
+                $request->getPath(),
+                $request->getOptions()
+            );
+
+            $response = $request->getBody();
+        } catch (ConnectException $e) {
+            $response = $e->getResponse();
         } catch (ClientException $e) {
             $response = $e->getResponse();
         }
-        $this->outputResponse($response);
+
         return $this->parseResponse($response);
     }
 
-    protected function outputRequest($request)
+    protected function parseResponse(StreamInterface $response)
     {
-        $this->output($request, '>');
-    }
-
-    protected function outputResponse($response)
-    {
-        $this->output($response, '<');
-    }
-
-    protected function output($message, $prefix = '')
-    {
-        if (!$this->debug)
-        {
-            return;
-        }
-        $message = explode("\n", (string)$message);
-        $message = array_map(function ($line) use ($prefix){
-            return $prefix.' '.$line;
-        }, $message);
-        echo implode("\n", $message).PHP_EOL;
-    }
-
-    protected function parseResponse(ResponseInterface $response)
-    {
-        $decodedResponse = json_decode($response->getBody());
+        $decodedResponse = json_decode($response->getContents());
         return $decodedResponse;
     }
 }
