@@ -45,7 +45,7 @@ class Client
 
             $response = $request->getBody();
         } catch (ConnectException $e) {
-            $response = $e->getResponse();
+            throw $e;
         } catch (ClientException $e) {
             $response = $e->getResponse();
         }
