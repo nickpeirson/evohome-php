@@ -12,19 +12,19 @@ abstract class AuthAbstract implements RequestInterface
     {
         return [
             'headers' => $this->getHeaders(),
-            'body' => $this->getBody()
+            'form_params' => $this->getFormParams()
         ];
     }
 
     public function getHeaders()
     {
-        $authToken = base64_encode(Service::APP_ID.':'.static::APP_PASS);
+        $authToken = base64_encode(Service::APP_ID . ':' . static::APP_PASS);
         return [
-            'Authorization' => 'Basic '.$authToken
+            'Authorization' => 'Basic ' . $authToken
         ];
     }
 
-    protected function getBody()
+    protected function getFormParams()
     {
         return [
             'scope' => 'EMEA-V1-Basic EMEA-V1-Anonymous EMEA-V1-Get-Current-User-Account'

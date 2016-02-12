@@ -10,12 +10,12 @@ class RefreshToken extends AuthAbstract
 	 */
 	protected $token;
 
-    protected function getBody()
+    protected function getFormParams()
     {
-        $body = parent::getBody();
-        $body['grant_type'] = 'refresh_token';
-        $body['refresh_token'] = $this->token->getRefreshToken();
-        return $body;
+        $formParams = parent::getFormParams();
+        $formParams['grant_type'] = 'refresh_token';
+        $formParams['refresh_token'] = $this->token->getRefreshToken();
+        return $formParams;
     }
 
     public function setToken(Token $token)
