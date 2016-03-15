@@ -40,7 +40,7 @@ class Client
             $request = $client->request(
                 $request->getMethod(),
                 $request->getPath(),
-                $request->getOptions()
+                array_merge($request->getOptions(), array('debug' => $this->debug))
             );
 
             $response = $request->getBody();
