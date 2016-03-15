@@ -6,13 +6,13 @@ class GetToken extends AuthAbstract
     protected $username;
     protected $password;
 
-    protected function getBody()
+    protected function getFormParams()
     {
-        $body = parent::getBody();
-        $body['grant_type'] = 'password';
-        $body['Username'] = $this->username;
-        $body['Password'] = $this->password;
-        return $body;
+        $formParams = parent::getFormParams();
+        $formParams['grant_type'] = 'password';
+        $formParams['Username'] = $this->username;
+        $formParams['Password'] = $this->password;
+        return $formParams;
     }
 
     public function setUsername($username)

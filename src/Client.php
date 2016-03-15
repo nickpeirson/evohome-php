@@ -3,13 +3,14 @@ namespace Nickpeirson\Evohome;
 
 use GuzzleHttp\ClientInterface as HttpClientInterface;
 use GuzzleHttp\Client as HttpClient;
-use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Message\RequestInterface as HttpRequestInterface;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Psr7\Stream;
+use Psr\Http\Message\StreamInterface;
 
 class Client
 {
-    const URL = 'https://rs.alarmnet.com:443/TotalConnectComfort/';
+    const URL = 'https://tccna.honeywell.com/';
 
     protected $debug = true;
     protected $httpClient;
@@ -22,60 +23,43 @@ class Client
     public static function init()
     {
         return new static(
-            new HttpClient([
-                    'base_url' => static::URL,
-                    'headers' => [
-                        'Accept' => 'application/json, application/xml, text/json, text/x-json, text/javascript, text/xml'
-                    ]
-                ]
-            )
+            new HttpClient(array(
+                'base_uri' => static::URL,
+                'headers' => array(
+                    'Accept' => 'application/json, application/xml, text/json, text/x-json, text/javascript, text/xml'
+                )
+            ))
         );
     }
 
     public function sendRequest(RequestInterface $request)
     {
         $client = $this->httpClient;
-        $request = $client->createRequest(
-            $request->getMethod(),
-            $request->getPath(),
-            $request->getOptions()
-        );
-        $this->outputRequest($request);
+
         try {
-            $response = $client->send($request);
+            $request = $client->request(
+                $request->getMethod(),
+                $request->getPath(),
+                array_merge($request->getOptions(), array('debug' => $this->debug))
+            );
+
+            $response = $request->getBody();
+        } catch (ConnectException $e) {
+            throw $e;
         } catch (ClientException $e) {
             $response = $e->getResponse();
         }
-        $this->outputResponse($response);
+
+        if (!$response instanceof Stream) {
+            throw new \Exception($response->getReasonPhrase(), $response->getStatusCode());
+        }
+
         return $this->parseResponse($response);
     }
 
-    protected function outputRequest($request)
+    protected function parseResponse(StreamInterface $response)
     {
-        $this->output($request, '>');
-    }
-
-    protected function outputResponse($response)
-    {
-        $this->output($response, '<');
-    }
-
-    protected function output($message, $prefix = '')
-    {
-        if (!$this->debug)
-        {
-            return;
-        }
-        $message = explode("\n", (string)$message);
-        $message = array_map(function ($line) use ($prefix){
-            return $prefix.' '.$line;
-        }, $message);
-        echo implode("\n", $message).PHP_EOL;
-    }
-
-    protected function parseResponse(ResponseInterface $response)
-    {
-        $decodedResponse = json_decode($response->getBody());
+        $decodedResponse = json_decode($response->getContents());
         return $decodedResponse;
     }
 }
