@@ -5,6 +5,7 @@ use GuzzleHttp\ClientInterface as HttpClientInterface;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\StreamInterface;
 
 class Client
@@ -22,13 +23,12 @@ class Client
     public static function init()
     {
         return new static(
-            new HttpClient([
-                    'base_uri' => static::URL,
-                    'headers' => [
-                        'Accept' => 'application/json, application/xml, text/json, text/x-json, text/javascript, text/xml'
-                    ]
-                ]
-            )
+            new HttpClient(array(
+                'base_uri' => static::URL,
+                'headers' => array(
+                    'Accept' => 'application/json, application/xml, text/json, text/x-json, text/javascript, text/xml'
+                )
+            ))
         );
     }
 
@@ -48,6 +48,10 @@ class Client
             throw $e;
         } catch (ClientException $e) {
             $response = $e->getResponse();
+        }
+
+        if (!$response instanceof Stream) {
+            throw new \Exception($response->getReasonPhrase(), $response->getStatusCode());
         }
 
         return $this->parseResponse($response);
