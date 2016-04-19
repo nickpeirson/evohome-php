@@ -5,7 +5,6 @@ use GuzzleHttp\ClientInterface as HttpClientInterface;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\StreamInterface;
 
 class Client
@@ -47,10 +46,10 @@ class Client
         } catch (ConnectException $e) {
             throw $e;
         } catch (ClientException $e) {
-            $response = $e->getResponse();
+            $response = $e->getResponse()->getBody();
         }
 
-        if (!$response instanceof Stream) {
+        if (!$response instanceof StreamInterface) {
             throw new \Exception($response->getReasonPhrase(), $response->getStatusCode());
         }
 
