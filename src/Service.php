@@ -9,8 +9,10 @@ use Nickpeirson\Evohome\Request\InstallationInfo;
 use Nickpeirson\Evohome\Request\LocationStatus;
 use Nickpeirson\Evohome\Request\Gateway;
 use Nickpeirson\Evohome\Request\LocationInstallationInfo;
-use Nickpeirson\Evohome\Request\ZoneSchedule;
 use Nickpeirson\Evohome\Request\RefreshToken;
+use Nickpeirson\Evohome\Request\Zone\Schedule;
+use Nickpeirson\Evohome\Request\ZoneAbstract;
+use Nickpeirson\Evohome\Request\Zone\HeatSetpoint;
 
 class Service
 {
@@ -94,7 +96,32 @@ class Service
 
     public function fetchZoneSchedule($zone)
     {
-        $response = $this->sendRequest(new ZoneSchedule($zone));
+        $response = $this->sendRequest(new Schedule($zone));
+        return $response;
+    }
+
+    public function setZoneTemperaturePermanently($zoneId, $temperature)
+    {
+        return $this->setZoneTemperature($zoneId, $temperature, ZoneAbstract::MODE_PERMANENT);
+    }
+
+    public function setZoneTemperatureTemporarily($zoneId, $temperature, \DateTime $timeUntil)
+    {
+        return $this->setZoneTemperature($zoneId, $temperature, ZoneAbstract::MODE_TEMPORARY, $timeUntil);
+    }
+
+    public function setZoneTemperatureScheduled($zoneId)
+    {
+        return $this->setZoneTemperature($zoneId, 0);
+    }
+
+    protected function setZoneTemperature(
+        $zoneId,
+        $temperature = 0,
+        $mode = ZoneAbstract::MODE_SCHEDULE,
+        \DateTime $timeUntil = null
+    ) {
+        $response = $this->sendRequest(new HeatSetpoint($zoneId, $temperature, $mode, $timeUntil));
         return $response;
     }
 
