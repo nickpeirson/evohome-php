@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickpeirson\Evohome\Value;
 
 class Switchpoint
@@ -35,6 +36,7 @@ class Switchpoint
     protected function setTemperature($temperature)
     {
         $this->temperature = (float) $temperature;
+
         return $this;
     }
 
@@ -46,6 +48,7 @@ class Switchpoint
         }
         $this->timeOfDay = $timeOfDay;
         $this->timeInSeconds = (($timeParts['hours'] * 60) + $timeParts['mins']) * 60;
+
         return $this;
     }
 

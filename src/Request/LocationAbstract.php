@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickpeirson\Evohome\Request;
 
 abstract class LocationAbstract extends TokenAbstract
@@ -14,6 +15,7 @@ abstract class LocationAbstract extends TokenAbstract
     public function getPath()
     {
         $path = sprintf('location/%s/', $this->location).$this->path;
+
         return parent::getPath().$path;
     }
 }

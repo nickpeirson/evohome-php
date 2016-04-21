@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickpeirson\Evohome\Request;
 
 abstract class ZoneAbstract extends TokenAbstract
@@ -18,6 +19,7 @@ abstract class ZoneAbstract extends TokenAbstract
     public function getPath()
     {
         $path = sprintf('temperatureZone/%s/', $this->zone).$this->path;
+
         return parent::getPath().$path;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickpeirson\Evohome;
 
 class Token
@@ -17,6 +18,7 @@ class Token
     public function setAccessToken($token)
     {
         $this->accessToken = $token;
+
         return $this;
     }
 
@@ -24,18 +26,21 @@ class Token
     {
         $this->expiresAt = time() + $expiry;
         $this->expiry = $expiry;
+
         return $this;
     }
 
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
     public function setRefreshToken($refreshToken)
     {
         $this->refreshToken = $refreshToken;
+
         return $this;
     }
 
@@ -48,9 +53,8 @@ class Token
     {
         return $this->type;
     }
-	public function getRefreshToken() {
-		return $this->refreshToken;
-	}
-
-
+    public function getRefreshToken()
+    {
+        return $this->refreshToken;
+    }
 }

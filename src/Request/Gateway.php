@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickpeirson\Evohome\Request;
 
 class Gateway extends TokenAbstract

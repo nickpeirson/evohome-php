@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickpeirson\Evohome\Request;
 
 class InstallationInfo extends TokenAbstract
@@ -13,6 +14,7 @@ class InstallationInfo extends TokenAbstract
     public function getPath()
     {
         $path = sprintf('location/installationInfo?userId=%s&includeTemperatureControlSystems=True', $this->userId);
+
         return parent::getPath().$path;
     }
 }

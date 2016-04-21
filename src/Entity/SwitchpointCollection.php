@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickpeirson\Evohome\Entity;
 
 class SwitchpointCollection extends \SplMaxHeap

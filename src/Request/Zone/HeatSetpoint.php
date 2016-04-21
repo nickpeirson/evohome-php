@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickpeirson\Evohome\Request\Zone;
 
 use Nickpeirson\Evohome\Request\ZoneAbstract;
@@ -23,11 +24,12 @@ class HeatSetpoint extends ZoneAbstract
         $options = parent::getOptions();
         $options['json'] = [
             'HeatSetpointValue' => $this->temperature,
-            'SetpointMode' => $this->mode
+            'SetpointMode' => $this->mode,
         ];
         if (!empty($this->timeUntil)) {
             $options['json']['TimeUntil'] = $this->timeUntil->format(\DateTime::ATOM);
         }
+
         return $options;
     }
 

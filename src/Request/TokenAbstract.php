@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickpeirson\Evohome\Request;
 
 use Nickpeirson\Evohome\RequestInterface;
@@ -14,14 +15,14 @@ abstract class TokenAbstract implements RequestInterface
     {
         return [
             'Authorization' => $this->token->getType().' '.$this->token->getAccessToken(),
-            'applicationId' => Service::APP_ID
+            'applicationId' => Service::APP_ID,
         ];
     }
 
     public function getOptions()
     {
         return [
-            'headers' => $this->getHeaders()
+            'headers' => $this->getHeaders(),
         ];
     }
 
@@ -38,6 +39,7 @@ abstract class TokenAbstract implements RequestInterface
     public function setToken(Token $token)
     {
         $this->token = $token;
+
         return $this;
     }
 }

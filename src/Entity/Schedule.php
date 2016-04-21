@@ -1,7 +1,9 @@
 <?php
+
 namespace Nickpeirson\Evohome\Entity;
 
 use Nickpeirson\Evohome\Value\Switchpoint;
+
 class Schedule
 {
     protected $days = [
@@ -11,7 +13,7 @@ class Schedule
         'Thursday' => 'Thursday',
         'Friday' => 'Friday',
         'Saturday' => 'Saturday',
-        'Sunday' => 'Sunday'
+        'Sunday' => 'Sunday',
     ];
     protected $dayOfWeek;
     protected $switchpoints = [];
@@ -46,21 +48,24 @@ class Schedule
     protected function setDayOfWeek($dayOfWeek)
     {
         $this->dayOfWeek = $dayOfWeek;
+
         return $this;
     }
 
     public function setSwitchpoints($switchpoints)
     {
         $this->switchpoints = new \SplPriorityQueue();
-        foreach($switchpoints as $switchpoint) {
+        foreach ($switchpoints as $switchpoint) {
             $this->addSwitchpoint($switchpoint);
         }
+
         return $this;
     }
 
     public function addSwitchpoint(Switchpoint $switchpoint)
     {
         $this->switchpoints->insert($switchpoint, -$switchpoint->getTimeInSeconds());
+
         return $this;
     }
 }

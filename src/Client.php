@@ -1,4 +1,5 @@
 <?php
+
 namespace Nickpeirson\Evohome;
 
 use GuzzleHttp\ClientInterface as HttpClientInterface;
@@ -25,8 +26,8 @@ class Client
             new HttpClient(array(
                 'base_uri' => static::URL,
                 'headers' => array(
-                    'Accept' => 'application/json, application/xml, text/json, text/x-json, text/javascript, text/xml'
-                )
+                    'Accept' => 'application/json, application/xml, text/json, text/x-json, text/javascript, text/xml',
+                ),
             ))
         );
     }
@@ -59,6 +60,7 @@ class Client
     protected function parseResponse(StreamInterface $response)
     {
         $decodedResponse = json_decode($response->getContents());
+
         return $decodedResponse;
     }
 }

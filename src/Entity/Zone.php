@@ -1,7 +1,8 @@
 <?php
+
 namespace Nickpeirson\Evohome\Entity;
 
-class Switchpoint
+class Zone
 {
     const HOURS = '(?:[0-1][0-9]|2[0-3])';
     const MINS = '[0-5][0-9]';
@@ -33,5 +34,4 @@ class Switchpoint
     {
         return $this->timeOfDay;
     }
-
 }
